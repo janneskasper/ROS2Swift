@@ -1,6 +1,6 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by Jannes Kasper on 04.07.23.
 //
@@ -11,7 +11,7 @@ import ROS2Swift
 
 @main
 class Startup{
-    var ros: ROS2Swift?
+    var node: Node
     
     static func main(){
         
@@ -27,28 +27,19 @@ class Startup{
     }
     
     init(name: String) {
-        do {
-            ros = try ROS2Swift(name: name)
-        }catch let error{
-            print("Failed to create ROS2Swift: ", error.localizedDescription)
-            ros = nil
-        }
+        node = Node(name: name)
     }
-    
-    func writer(){
-        do{
-            try self.ros?.runWriter()
-        }catch let error{
-            print("Failed run writer: ", error.localizedDescription)
-        }
-    }
-    
-    func reader(){
-        let t = (CommandLine.arguments.count > 2) ? Int(CommandLine.arguments[2]) : 1000000
 
-        do{
-            try self.ros?.runReader(time: t!)
-        }catch let error{
-            print("Failed run reader: ", error.localizedDescription)
-        }    }
+    func writer(){
+        node.createPublisher(topicName: "testBool", topicType: BoolMsg.self)
+    }
+
+    func reader(){
+        let callback = {(msg: BoolMsg) -> Void in
+            print("Bool Msg callback with key: ", msg.key, ", ", msg.val)
+        }
+        
+        node.createSubscriber(topicName: "testBool", callback: callback)
+        
+    }
 }

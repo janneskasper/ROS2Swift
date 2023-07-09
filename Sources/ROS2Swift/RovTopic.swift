@@ -6,10 +6,10 @@
 import Foundation
 import FastRTPSBridge
 
-enum ReaderTopic: String, DDSReaderTopic, DDSWriterTopic {
-    case rovDepth                    = "rov_depth"                         // orov::msg::sensor::Depth
-    case rovPressureInternal         = "rov_pressure_internal"             // orov::msg::sensor::Barometer
-
-    var transientLocal: Bool { false }
-    var reliable: Bool { false }
-}
+//enum ReaderTopic: String, DDSReaderTopic, DDSWriterTopic {
+//    case rovDepth                    = "rov_depth"                         // orov::msg::sensor::Depth
+//    case rovPressureInternal         = "rov_pressure_internal"             // orov::msg::sensor::Barometer
+//
+//    var transientLocal: Bool { false }
+//    var reliable: Bool { false }
+//}
