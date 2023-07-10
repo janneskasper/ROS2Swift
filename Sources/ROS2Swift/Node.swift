@@ -8,6 +8,34 @@
 import Foundation
 import FastRTPSBridge
 
+public class Publisher<T: DDSType>{
+    private let topic: any DDSWriterTopic
+    private let type: T.Type
+    private let context: FastRTPSBridge
+    
+    init(topic: any DDSWriterTopic, context: FastRTPSBridge, type: T.Type) {
+        self.topic = topic
+        self.context = context
+        self.type = type
+    }
+    
+    deinit {
+        do{
+            try context.removeWriter(topic: self.topic)
+        }catch{
+            print(self.topic.rawValue, ": Error when removing publisher: ", error)
+        }
+    }
+    
+    public func publish<T: DDSType>(msg: T){
+        do{
+            try self.context.send(topic: self.topic, ddsData: msg)
+        }catch{
+            print(self.topic.rawValue, ": Failed to send data: ", error)
+        }
+    }
+}
+
 
 public class Node: RTPSSubscriberDelegate{
     var context: FastRTPSBridge
@@ -47,6 +75,7 @@ public class Node: RTPSSubscriberDelegate{
     }
     
     public func spin(sleepInterval: Float = 0.1){
+        print(self.name, ": Spinning ...")
         while self.running{
             Thread.sleep(forTimeInterval: TimeInterval(sleepInterval))
         }
@@ -56,24 +85,49 @@ public class Node: RTPSSubscriberDelegate{
         let start_t = TimeInterval()
         spinOnceFlag = false
         
-        while TimeInterval() - start_t < Double(timeoutSec) && !spinOnceFlag{
+        print(self.name, ": Spinning once ...")
+        while TimeInterval() - start_t < Double(timeoutSec) && !self.spinOnceFlag && self.running{
             Thread.sleep(forTimeInterval: TimeInterval(sleepInterval))
         }
     }
     
-    func shutdown(){
+    public func runReader(time: Int) throws {
+        let t = BaseTopic(name: "test", reliable: false, transientLocal: false)
+
+        try context.registerReader(topic: t) { (val: StringMsg) in
+            print("Value:", val)
+        }
+        for i in 1...time{
+            print("Reader waiting ", i)
+            Thread.sleep(forTimeInterval: 1.0)
+        }
+    }
+        
+    public func runWriter() throws {
+        let t = BaseTopic(name: "test", reliable: false, transientLocal: false)
+        try context.registerWriter(topic: t, ddsType: StringMsg.self)
+        for i in 1...100{
+            let msg = StringMsg(val: String(i), id: "1")
+            try context.send(topic: t, ddsData: msg)
+            Thread.sleep(forTimeInterval: 2.0)
+        }
+    }
+    
+    public func shutdown(){
         self.context.stopAll()
         self.context.removeParticipant()
         self.running = false
     }
     
-    public func createPublisher<T: DDSType>(topicName: String, topicType: T.Type, reliable: Bool = false, transientLocal: Bool = false){
+    public func createPublisher<T: DDSType>(topicName: String, topicType: T.Type, reliable: Bool = false, transientLocal: Bool = false) -> Publisher<T>?{
         let topic = BaseTopic(name: topicName, reliable: reliable, transientLocal: transientLocal)
         do{
             try self.context.registerWriter(topic: topic, ddsType: T.self)
         }catch{
             print(name, ": Failed to register writer on topic: ", topic.rawValue)
+            return nil
         }
+        return Publisher<T>(topic: topic, context: self.context, type: topicType.self)
     }
 
     public func createSubscriber<T: DDSType>(topicName: String, callback: @escaping(T) -> Void, reliable: Bool = false, transientLocal: Bool = false){
