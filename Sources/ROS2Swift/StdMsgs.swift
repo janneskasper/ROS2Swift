@@ -36,6 +36,7 @@ public class Msg<T: Decodable & Encodable>: DDSKeyed{
     }
     
     public func getKey() -> String{
-        return key.base64EncodedString()
+        return String(decoding: self.key, as: UTF8.self)
+
     }
 }
