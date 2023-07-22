@@ -6,7 +6,7 @@ final class ROS2SwiftTests: XCTestCase {
     static var passed: Bool = false
     static var topicName: String = "testFloat"
     
-    func testExample() throws {
+    func testPubSub() throws {
         let t_sub = TestSubThread()
         t_sub.start()
         
