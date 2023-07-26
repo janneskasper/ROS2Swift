@@ -1,6 +1,27 @@
 import FastRTPSBridge
 import Foundation
 
+public enum MsgTypes: String, CaseIterable{
+    case StdMsgs = "StdMsgs"
+    case SensorMsgs = "SensorMsgs"
+}
+
+public class MsgTemplate<T: Codable>: DDSKeyed{
+    
+    public let key: Data
+    public var val: T
+    public class var ddsTypeName: String { "BaseMsg" }
+    
+    public init(id: String, val: T) {
+        self.key = id.data(using: .utf8)!
+        self.val = val
+    }
+    
+    public func getKey() -> String{
+        return String(decoding: self.key, as: UTF8.self)
+
+    }
+}
 
 class BaseTopic: DDSReaderTopic, DDSWriterTopic{
     var rawValue: String
