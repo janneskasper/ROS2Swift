@@ -12,7 +12,9 @@ public struct MsgTypeDescription: Codable, Equatable, Hashable{
     }
 }
 
-public enum MsgBaseTypes: String, CaseIterable, Codable{
+public enum MsgBaseTypes: String, CaseIterable, Codable, Identifiable{
+    public var id: Self {self}
+
     case StdMsgs = "StdMsgs"
     case SensorMsgs = "SensorMsgs"
 }

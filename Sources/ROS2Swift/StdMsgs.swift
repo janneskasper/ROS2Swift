@@ -8,7 +8,9 @@
 import Foundation
 import FastRTPSBridge
 
-public enum StdMsgTypes: String, CaseIterable, Codable{
+public enum StdMsgTypes: String, CaseIterable, Codable, Identifiable{
+    public var id: Self {self}
+
     case Int = "Int"
     case Float = "Float"
     case Double = "Double"

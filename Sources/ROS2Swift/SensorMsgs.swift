@@ -8,7 +8,9 @@
 import Foundation
 
 
-public enum SensorMsgs: String, CaseIterable, Codable{
+public enum SensorMsgs: String, CaseIterable, Codable, Identifiable{
+    public var id: Self {self}
+    
     case RGBImage = "RGBImage"
     case Image = "Image"
     case PointCloud = "PointCloud"
