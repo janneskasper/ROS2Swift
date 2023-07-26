@@ -1,11 +1,12 @@
 import FastRTPSBridge
 import Foundation
 
+
 public struct MsgTypeDescription: Codable, Equatable, Hashable{
-    var baseType: String
-    var type: String
+    public let baseType: String
+    public let type: String
     
-    init(baseType: String, type: String) {
+    public init(baseType: String, type: String) {
         self.baseType = baseType
         self.type = type
     }

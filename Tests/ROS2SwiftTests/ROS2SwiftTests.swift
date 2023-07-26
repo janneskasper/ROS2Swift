@@ -9,7 +9,7 @@ final class ROS2SwiftTests: XCTestCase {
     func testPubSub() throws {
         let t_sub = TestSubThread()
         t_sub.start()
-        
+                
         Thread.sleep(forTimeInterval: 0.5)
         
         let pub = ROS2SwiftTests.node.createPublisher(topicName: ROS2SwiftTests.topicName, topicType: FloatMsg.self)
