@@ -8,15 +8,13 @@
 import Foundation
 import FastRTPSBridge
 
-
-public enum StdMsgs: String, MsgTypeDescription{
+public enum StdMsgTypes: String, CaseIterable, Codable{
     case Int = "Int"
     case Float = "Float"
     case Double = "Double"
     case String = "String"
     case Bool = "Bool"
 }
-
 
 public class StringMsg: MsgTemplate<String>{
     public override class var ddsTypeName: String {"StdMsgs::String"}
