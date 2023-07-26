@@ -8,7 +8,7 @@
 import Foundation
 
 
-public enum SensorMsgs: String, CaseIterable{
+public enum SensorMsgs: String, MsgTypeDescription{
     case RGBImage = "RGBImage"
     case Image = "Image"
     case PointCloud = "PointCloud"

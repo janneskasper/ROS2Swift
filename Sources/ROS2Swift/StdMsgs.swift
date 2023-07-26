@@ -9,7 +9,7 @@ import Foundation
 import FastRTPSBridge
 
 
-public enum StdMsgs: String, CaseIterable{
+public enum StdMsgs: String, MsgTypeDescription{
     case Int = "Int"
     case Float = "Float"
     case Double = "Double"

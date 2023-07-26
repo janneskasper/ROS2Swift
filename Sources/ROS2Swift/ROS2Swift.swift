@@ -1,6 +1,15 @@
 import FastRTPSBridge
 import Foundation
 
+
+public struct MsgType{
+    var baseType: MsgTypes
+    var subType: any MsgTypeDescription
+}
+
+protocol MsgTypeDescription: CaseIterable{
+}
+
 public enum MsgTypes: String, CaseIterable{
     case StdMsgs = "StdMsgs"
     case SensorMsgs = "SensorMsgs"
