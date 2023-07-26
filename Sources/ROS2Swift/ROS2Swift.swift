@@ -3,8 +3,8 @@ import Foundation
 
 
 public struct MsgTypeDescription: Codable, Equatable, Hashable{
-    public let baseType: String
-    public let type: String
+    public var baseType: String
+    public var type: String
     
     public init(baseType: String, type: String) {
         self.baseType = baseType
