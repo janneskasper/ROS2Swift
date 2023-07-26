@@ -1,7 +1,7 @@
 import FastRTPSBridge
 import Foundation
 
-public struct MsgTypeDescription: Codable{
+public struct MsgTypeDescription: Codable, Equatable, Hashable{
     var baseType: String
     var type: String
 }
